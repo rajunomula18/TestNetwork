@@ -1,0 +1,97 @@
+apply plugin: 'com.android.library'
+
+ext {
+    versions = [
+            'compileSdk': 27,
+            'minSdk': 21,
+            'targetSdk': 27,
+
+            'gradle': '3.1.0',
+            'supportLibrary': '27.0.2',
+            'dagger': '2.13',
+            'gson': '2.8.2',
+            'okhttp': '3.9.1',
+            'retrofit': '2.3.0'
+    ]
+
+    deps = [
+            //Support Lib
+            'support': [
+                    'appCompat': "com.android.support:appcompat-v7:${versions.supportLibrary}"
+            ],
+
+            // Dagger 2: https://google.github.io/dagger/users-guide
+            'dagger': [
+                    'core': "com.google.dagger:dagger:${versions.dagger}",
+                    'compiler': "com.google.dagger:dagger-compiler:${versions.dagger}",
+            ],
+
+            // Gson: https://github.com/google/gson
+            'gson': "com.google.code.gson:gson:${versions.gson}",
+
+            // OkHttp: http://square.github.io/okhttp/
+            // MockWebServer: https://github.com/square/okhttp/tree/master/mockwebserver
+            'okhttp': [
+                    'logger': "com.squareup.okhttp3:logging-interceptor:${versions.okhttp}",
+                    'mockServer': "com.squareup.okhttp3:mockwebserver:${versions.okhttp}"
+            ],
+
+            // Retrofit: http://square.github.io/retrofit/
+            'retrofit': [
+                    'core': "com.squareup.retrofit2:retrofit:${versions.retrofit}",
+                    'mock': "com.squareup.retrofit2:retrofit-mock:${versions.retrofit}",
+                    'gson': "com.squareup.retrofit2:converter-gson:${versions.retrofit}",
+            ]
+    ]
+}
+
+android {
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    compileSdkVersion versions.compileSdk
+    defaultConfig {
+        minSdkVersion versions.minSdk
+        targetSdkVersion versions.targetSdk
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+
+        }
+
+        packagingOptions {
+        }
+    }
+}
+
+dependencies {
+    implementation deps.gson
+
+    implementation deps.dagger.core
+    annotationProcessor deps.dagger.compiler
+
+    implementation deps.support.appCompat
+
+    implementation deps.retrofit.core
+    implementation deps.retrofit.gson
+    implementation deps.okhttp.logger
+    implementation deps.okhttp.mockServer
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
